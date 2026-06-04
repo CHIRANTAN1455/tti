@@ -422,73 +422,208 @@ async def seed_data():
     await db.courses.delete_many({})
     
     courses = [
-        # Wellness Track
+        # ETT Prerequisite Foundation Course Modules (Wellness Track)
         Course(
-            title="ETT Foundational Course",
+            title="Module 1 — Understanding Trauma",
             track="wellness",
-            level="prerequisite",
-            description="Essential foundation for all ETT training tracks",
-            detailed_description="This comprehensive foundational course introduces the core principles of Emotional Transformation Therapy. You'll learn the theoretical framework, basic techniques, and prepare for advanced training in either the Wellness or Clinical track.",
-            price=25000.00,
+            level="module",
+            description="Acute, chronic, and developmental trauma fundamentals",
+            detailed_description="This module covers how trauma lives in the nervous system and body. Learn about acute, chronic, and developmental trauma, trauma stored in the nervous system and body memory, intergenerational patterns and defense mechanisms, and the 'inner thorn' approach to safe trauma work.",
+            price=15000.00,
             equipment_fee=0.0,
-            duration="2 days",
+            duration="1 day",
             location="Mumbai, India",
-            schedule="March 15-16, 2025",
-            instructor="Dr. Priya Sharma",
+            schedule="March 2025",
+            instructor="ETT Certified Trainer",
             max_participants=25,
             features=[
-                "Introduction to ETT principles",
-                "Understanding emotional patterns",
-                "Basic intervention techniques",
-                "Certificate of completion",
-                "Access to online resources"
+                "Acute, chronic, and developmental trauma",
+                "Trauma stored in nervous system and body memory",
+                "Intergenerational patterns and defense mechanisms",
+                "The 'inner thorn' approach to safe trauma work"
             ]
         ),
         Course(
-            title="ETT Wellness Level 1",
+            title="Module 2 — Brain Waves & Nervous System States",
             track="wellness",
-            level="level1",
-            description="Emotional regulation & stress reduction with SRT chart and wands (MDEM)",
-            detailed_description="Level 1 Wellness training introduces the SRT (Spectral Resonance Therapy) chart and wands using the MDEM (Multi-Dimensional Energy Method). Learn to facilitate emotional regulation and stress reduction for personal and professional wellness applications.",
-            price=45000.00,
-            equipment_fee=15000.00,
-            duration="3-4 days",
+            level="module",
+            description="Delta, theta, alpha, beta, and gamma brain states",
+            detailed_description="Understand why brain states matter more than insight in healing. Explore delta, theta, alpha, beta, and gamma brain states, emotional regulation and cognitive function, and why timing and brain state determine therapeutic success.",
+            price=15000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Mumbai, India",
+            schedule="March 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Delta, theta, alpha, beta, gamma states",
+                "Emotional regulation and cognitive function",
+                "Timing and brain state in therapy",
+                "Nervous system readiness for healing"
+            ]
+        ),
+        Course(
+            title="Module 3 — The Role of Eyes in Healing",
+            track="wellness",
+            level="module",
+            description="Neurological pathways connected to eye movement",
+            detailed_description="Learn how eye movement, perception, and visual input affect emotional processing. Cover neurological pathways connected to eye movement, visual input, memory access, emotional regulation, and how guided eye movement supports processing in ETT.",
+            price=15000.00,
+            equipment_fee=0.0,
+            duration="1 day",
             location="Delhi, India",
-            schedule="April 5-8, 2025",
-            instructor="Dr. Anjali Mehta",
+            schedule="April 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Neurological pathways and eye movement",
+                "Visual input, memory access, emotional regulation",
+                "Guided eye movement in ETT",
+                "Perception and emotional processing"
+            ]
+        ),
+        Course(
+            title="Module 4 — Attachment Styles and Relationships",
+            track="wellness",
+            level="module",
+            description="Secure, anxious, avoidant, and disorganized attachment",
+            detailed_description="Understand the relevance of attachment styles in therapeutic readiness. Learn about secure, anxious, avoidant, and disorganized attachment, how attachment patterns influence healing capacity, and working with relational patterns in ETT practice.",
+            price=15000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Delhi, India",
+            schedule="April 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Secure, anxious, avoidant, disorganized attachment",
+                "Attachment patterns and healing capacity",
+                "Working with relational patterns",
+                "Therapeutic readiness assessment"
+            ]
+        ),
+        Course(
+            title="Module 5 — Chakras and Levels of Consciousness",
+            track="wellness",
+            level="module",
+            description="Chakras as psychological and energetic centers",
+            detailed_description="Explore the relationship between chakras, consciousness, and psychological states. Learn about chakras as psychological and energetic centers, progression from survival to self-realization, and integrating chakra awareness into therapeutic work.",
+            price=15000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Bangalore, India",
+            schedule="May 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Chakras as psychological centers",
+                "Progression from survival to self-realization",
+                "Integrating chakra awareness in therapy",
+                "Consciousness levels and healing"
+            ]
+        ),
+        Course(
+            title="Module 6 — Introduction to ETT",
+            track="wellness",
+            level="module",
+            description="Foundations and principles of Emotional Transformation Therapy",
+            detailed_description="Learn the foundations and principles of ETT, how ETT works beyond talk therapy, and the integration of perception, memory, and nervous system in the healing process.",
+            price=18000.00,
+            equipment_fee=0.0,
+            duration="1.5 days",
+            location="Bangalore, India",
+            schedule="May 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Foundations and principles of ETT",
+                "How ETT works beyond talk therapy",
+                "Perception, memory, nervous system integration",
+                "Introduction to ETT techniques"
+            ]
+        ),
+        Course(
+            title="Module 7 — Epigenetics and Neuroplasticity",
+            track="wellness",
+            level="module",
+            description="How experiences influence gene expression and brain rewiring",
+            detailed_description="Understand the science of neuroplasticity and epigenetics behind lasting change. Learn how experiences influence gene expression, the brain's capacity to rewire, and supporting permanent change through neurological pathways.",
+            price=15000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Chennai, India",
+            schedule="June 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "How experiences influence gene expression",
+                "Brain's capacity to rewire",
+                "Supporting permanent change",
+                "Neurological pathways of transformation"
+            ]
+        ),
+        Course(
+            title="Module 8 — Ethics in Healing and Wellness",
+            track="wellness",
+            level="module",
+            description="Boundaries, consent, and client safety in trauma work",
+            detailed_description="Learn ethical responsibility in healing work including boundaries, consent, and client safety, professional responsibility in trauma work, and ETT-specific ethical considerations.",
+            price=12000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Chennai, India",
+            schedule="June 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
+            features=[
+                "Boundaries, consent, client safety",
+                "Professional responsibility",
+                "ETT-specific ethical considerations",
+                "Annual ethics certification"
+            ]
+        ),
+        Course(
+            title="Module 9 — Light and Color in Healing",
+            track="wellness",
+            level="module",
+            description="Physiological and psychological effects of light and color",
+            detailed_description="Learn how light and color directly influence physiology and emotion. Cover physiological and psychological effects of light and color, wavelengths, perception, and emotional states, and practical applications in ETT and wellness settings.",
+            price=18000.00,
+            equipment_fee=5000.00,
+            duration="1.5 days",
+            location="Hyderabad, India",
+            schedule="July 2025",
+            instructor="ETT Certified Trainer",
             max_participants=20,
             features=[
-                "SRT chart fundamentals",
-                "MDEM wand techniques",
-                "Emotional regulation protocols",
-                "Stress reduction methods",
-                "Practice sessions",
-                "Equipment included"
+                "Physiological effects of light and color",
+                "Wavelengths and emotional states",
+                "Practical applications in ETT",
+                "Light therapy equipment training"
             ]
         ),
         Course(
-            title="ETT Wellness Level 2",
+            title="Module 10 — Cultural Considerations in Therapy",
             track="wellness",
-            level="level2",
-            description="Brain wave light stimulation and Google-PES protocols",
-            detailed_description="Advanced wellness training covering brain wave light stimulation techniques and Google-PES (Peripheral Energy Stimulation) protocols. Master sophisticated approaches to somatic healing and spiritual wellness pathways.",
-            price=55000.00,
-            equipment_fee=20000.00,
-            duration="3-4 days",
-            location="Bangalore, India",
-            schedule="May 10-13, 2025",
-            instructor="Dr. Vikram Patel",
-            max_participants=15,
+            level="module",
+            description="Cultural identity, racial, and intergenerational dynamics",
+            detailed_description="Learn the importance of cultural awareness in therapy and wellness practice. Cover cultural identity and healing, racial, ethnic, and intergenerational dynamics, and practicing ETT with cultural sensitivity and awareness.",
+            price=12000.00,
+            equipment_fee=0.0,
+            duration="1 day",
+            location="Hyderabad, India",
+            schedule="July 2025",
+            instructor="ETT Certified Trainer",
+            max_participants=25,
             features=[
-                "Brain wave stimulation",
-                "Google-PES protocols",
-                "Somatic healing techniques",
-                "Spiritual wellness integration",
-                "Advanced practice sessions",
-                "Specialized equipment"
+                "Cultural identity and healing",
+                "Racial, ethnic, intergenerational dynamics",
+                "ETT with cultural sensitivity",
+                "Inclusive practice guidelines"
             ]
         ),
-        # Clinical Track
+        # Clinical Track Courses
         Course(
             title="ETT Clinical Level 1",
             track="clinical",
@@ -503,7 +638,7 @@ async def seed_data():
             instructor="Dr. Rajesh Kumar",
             max_participants=18,
             features=[
-                "All Wellness Level 1 content",
+                "All prerequisite modules content",
                 "Clinical assessment protocols",
                 "Attachment-based interventions",
                 "Case conceptualization",

@@ -12,6 +12,15 @@ import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Logo component
+const Logo = ({ className = "w-8 h-8" }) => (
+  <img 
+    src="https://customer-assets.emergentagent.com/job_ett-india/artifacts/ksfgr2qo_image.png" 
+    alt="TTI Logo" 
+    className={className}
+  />
+);
+
 const DashboardPage = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
@@ -49,15 +58,20 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-navy-50/30">
+    <div className="min-h-screen bg-[#f8fafa]">
+      {/* Wavy Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <svg className="absolute top-0 left-0 w-full opacity-30" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#d4eded" d="M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,213.3C840,203,960,149,1080,144C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+        </svg>
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-slate-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-navy-900 rounded-sm flex items-center justify-center">
-                <span className="text-white font-playfair font-bold text-sm">T</span>
-              </div>
+              <Logo className="w-8 h-8" />
               <span className="font-playfair font-semibold text-navy-900">TTI Dashboard</span>
             </Link>
             
@@ -69,7 +83,7 @@ const DashboardPage = () => {
                 variant="outline" 
                 size="sm"
                 onClick={handleLogout}
-                className="font-dm-sans"
+                className="font-dm-sans rounded-lg"
                 data-testid="logout-btn"
               >
                 <LogOut className="w-4 h-4 mr-2" />
@@ -81,7 +95,7 @@ const DashboardPage = () => {
       </nav>
 
       {/* Content */}
-      <div className="pt-24 pb-12 px-6">
+      <div className="pt-24 pb-12 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -100,10 +114,10 @@ const DashboardPage = () => {
 
             {/* Stats */}
             <div className="grid sm:grid-cols-3 gap-4 mb-8">
-              <Card className="border-slate-200 shadow-card">
+              <Card className="border-slate-200 shadow-card bg-white rounded-xl">
                 <CardContent className="p-6 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-sky/10 flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-sky" />
+                  <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center">
+                    <BookOpen className="w-6 h-6 text-teal" />
                   </div>
                   <div>
                     <p className="text-2xl font-playfair font-bold text-navy-900">
@@ -114,7 +128,7 @@ const DashboardPage = () => {
                 </CardContent>
               </Card>
               
-              <Card className="border-slate-200 shadow-card">
+              <Card className="border-slate-200 shadow-card bg-white rounded-xl">
                 <CardContent className="p-6 flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
                     <Award className="w-6 h-6 text-emerald-600" />
@@ -128,7 +142,7 @@ const DashboardPage = () => {
                 </CardContent>
               </Card>
               
-              <Card className="border-slate-200 shadow-card">
+              <Card className="border-slate-200 shadow-card bg-white rounded-xl">
                 <CardContent className="p-6 flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-amber-600" />
@@ -144,7 +158,7 @@ const DashboardPage = () => {
             </div>
 
             {/* Enrolled Courses */}
-            <Card className="border-slate-200 shadow-card">
+            <Card className="border-slate-200 shadow-card bg-white rounded-xl">
               <CardHeader>
                 <CardTitle className="font-playfair text-navy-900">
                   My Enrolled Courses
@@ -153,7 +167,7 @@ const DashboardPage = () => {
               <CardContent>
                 {loading ? (
                   <div className="flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal"></div>
                   </div>
                 ) : enrollments.length === 0 ? (
                   <div className="text-center py-12">
@@ -166,12 +180,12 @@ const DashboardPage = () => {
                     </p>
                     <div className="flex gap-4 justify-center">
                       <Link to="/wellness">
-                        <Button className="bg-sky hover:bg-sky/90 font-dm-sans" data-testid="browse-wellness-btn">
+                        <Button className="bg-teal hover:bg-teal/90 font-dm-sans rounded-lg" data-testid="browse-wellness-btn">
                           Wellness Track
                         </Button>
                       </Link>
                       <Link to="/clinical">
-                        <Button className="bg-navy-900 hover:bg-navy-800 font-dm-sans" data-testid="browse-clinical-btn">
+                        <Button className="bg-navy-900 hover:bg-navy-800 font-dm-sans rounded-lg" data-testid="browse-clinical-btn">
                           Clinical Track
                         </Button>
                       </Link>
@@ -181,14 +195,14 @@ const DashboardPage = () => {
                   <div className="space-y-4">
                     {enrollments.map((item, index) => (
                       <div key={item.enrollment.id}>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-navy-50/50 hover:bg-navy-50 transition-colors">
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <h3 className="font-playfair font-semibold text-navy-900">
                                 {item.course.title}
                               </h3>
                               <Badge 
-                                className={`font-dm-sans text-xs ${item.course.track === 'wellness' ? 'bg-sky/10 text-sky' : 'bg-navy-100 text-navy-700'}`}
+                                className={`font-dm-sans text-xs border-0 ${item.course.track === 'wellness' ? 'bg-teal/10 text-teal' : 'bg-navy-100 text-navy-700'}`}
                               >
                                 {item.course.track}
                               </Badge>
@@ -202,13 +216,13 @@ const DashboardPage = () => {
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
-                            <Badge className="bg-emerald-100 text-emerald-700 font-dm-sans">
+                            <Badge className="bg-emerald-100 text-emerald-700 font-dm-sans border-0">
                               Enrolled
                             </Badge>
                             <Button 
                               variant="outline" 
                               size="sm"
-                              className="font-dm-sans"
+                              className="font-dm-sans rounded-lg"
                               onClick={() => navigate(`/courses/${item.course.id}`)}
                             >
                               View
@@ -227,7 +241,7 @@ const DashboardPage = () => {
             {/* Quick Links */}
             {enrollments.length > 0 && (
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                <Card className="border-slate-200 shadow-card hover:shadow-card-hover transition-all cursor-pointer">
+                <Card className="border-slate-200 shadow-card hover:shadow-card-hover transition-all cursor-pointer bg-white rounded-xl">
                   <CardContent className="p-6">
                     <h3 className="font-playfair font-semibold text-navy-900 mb-2">
                       Training Materials
@@ -235,13 +249,13 @@ const DashboardPage = () => {
                     <p className="text-sm font-dm-sans text-navy-500 mb-4">
                       Access course resources, protocols, and supplementary materials
                     </p>
-                    <Button variant="outline" size="sm" className="font-dm-sans">
+                    <Button variant="outline" size="sm" className="font-dm-sans rounded-lg">
                       Coming Soon
                     </Button>
                   </CardContent>
                 </Card>
                 
-                <Card className="border-slate-200 shadow-card hover:shadow-card-hover transition-all cursor-pointer">
+                <Card className="border-slate-200 shadow-card hover:shadow-card-hover transition-all cursor-pointer bg-white rounded-xl">
                   <CardContent className="p-6">
                     <h3 className="font-playfair font-semibold text-navy-900 mb-2">
                       Consultation Calls
@@ -249,7 +263,7 @@ const DashboardPage = () => {
                     <p className="text-sm font-dm-sans text-navy-500 mb-4">
                       Schedule monthly consultation calls with ETT instructors
                     </p>
-                    <Button variant="outline" size="sm" className="font-dm-sans">
+                    <Button variant="outline" size="sm" className="font-dm-sans rounded-lg">
                       Coming Soon
                     </Button>
                   </CardContent>

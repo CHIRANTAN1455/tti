@@ -12,6 +12,15 @@ import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Logo component
+const Logo = ({ className = "w-8 h-8" }) => (
+  <img 
+    src="https://customer-assets.emergentagent.com/job_ett-india/artifacts/ksfgr2qo_image.png" 
+    alt="TTI Logo" 
+    className={className}
+  />
+);
+
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
   const { user, token } = useAuth();
@@ -76,8 +85,8 @@ const CourseDetailsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafa]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal"></div>
       </div>
     );
   }
@@ -90,15 +99,22 @@ const CourseDetailsPage = () => {
   const isWellness = course.track === 'wellness';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f8fafa]">
+      {/* Wavy Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <svg className="absolute top-0 left-0 w-full opacity-30" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#d4eded" d="M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,213.3C840,203,960,149,1080,144C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+        </svg>
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-slate-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link 
                 to={isWellness ? '/wellness' : '/clinical'} 
-                className="flex items-center gap-2 text-navy-500 hover:text-navy-900 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-navy-500 hover:text-navy-900 hover:border-slate-300 transition-all bg-white"
                 data-testid="back-link"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -109,13 +125,13 @@ const CourseDetailsPage = () => {
             <div className="flex items-center gap-4">
               {user ? (
                 <Link to="/dashboard">
-                  <Button variant="outline" className="font-dm-sans" data-testid="dashboard-btn">
+                  <Button variant="outline" className="font-dm-sans rounded-lg" data-testid="dashboard-btn">
                     Dashboard
                   </Button>
                 </Link>
               ) : (
                 <Link to="/login">
-                  <Button variant="outline" className="font-dm-sans" data-testid="login-btn">
+                  <Button variant="outline" className="font-dm-sans rounded-lg" data-testid="login-btn">
                     Sign In
                   </Button>
                 </Link>
@@ -126,7 +142,7 @@ const CourseDetailsPage = () => {
       </nav>
 
       {/* Content */}
-      <div className="pt-24 pb-24 px-6">
+      <div className="pt-24 pb-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Main Content */}
@@ -137,7 +153,7 @@ const CourseDetailsPage = () => {
               transition={{ duration: 0.5 }}
             >
               <Badge 
-                className={`mb-4 font-dm-sans ${isWellness ? 'bg-sky/10 text-sky' : 'bg-navy-100 text-navy-700'}`}
+                className={`mb-4 font-dm-sans border-0 px-4 py-1.5 ${isWellness ? 'bg-teal/10 text-teal' : 'bg-navy-100 text-navy-700'}`}
               >
                 {course.track.charAt(0).toUpperCase() + course.track.slice(1)} Track - {course.level}
               </Badge>
@@ -152,29 +168,29 @@ const CourseDetailsPage = () => {
 
               {/* Course Info */}
               <div className="grid sm:grid-cols-2 gap-4 mb-10">
-                <div className="flex items-center gap-3 p-4 bg-navy-50 rounded-lg">
-                  <Calendar className="w-5 h-5 text-navy-400" />
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <Calendar className="w-5 h-5 text-teal" />
                   <div>
                     <p className="text-xs font-dm-sans text-navy-400 uppercase tracking-wide">Schedule</p>
                     <p className="font-dm-sans text-navy-900">{course.schedule}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-navy-50 rounded-lg">
-                  <MapPin className="w-5 h-5 text-navy-400" />
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <MapPin className="w-5 h-5 text-teal" />
                   <div>
                     <p className="text-xs font-dm-sans text-navy-400 uppercase tracking-wide">Location</p>
                     <p className="font-dm-sans text-navy-900">{course.location}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-navy-50 rounded-lg">
-                  <Clock className="w-5 h-5 text-navy-400" />
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <Clock className="w-5 h-5 text-teal" />
                   <div>
                     <p className="text-xs font-dm-sans text-navy-400 uppercase tracking-wide">Duration</p>
                     <p className="font-dm-sans text-navy-900">{course.duration}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-navy-50 rounded-lg">
-                  <Users className="w-5 h-5 text-navy-400" />
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <Users className="w-5 h-5 text-teal" />
                   <div>
                     <p className="text-xs font-dm-sans text-navy-400 uppercase tracking-wide">Instructor</p>
                     <p className="font-dm-sans text-navy-900">{course.instructor}</p>
@@ -190,8 +206,8 @@ const CourseDetailsPage = () => {
                 <div className="grid sm:grid-cols-2 gap-4">
                   {course.features?.map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${isWellness ? 'bg-sky/10' : 'bg-navy-100'}`}>
-                        <Check className={`w-3 h-3 ${isWellness ? 'text-sky' : 'text-navy-600'}`} />
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${isWellness ? 'bg-teal/10' : 'bg-navy-100'}`}>
+                        <Check className={`w-3 h-3 ${isWellness ? 'text-teal' : 'text-navy-600'}`} />
                       </div>
                       <span className="font-dm-sans text-navy-600">{feature}</span>
                     </div>
@@ -206,7 +222,7 @@ const CourseDetailsPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <Card className="sticky top-28 border-slate-200 shadow-card-hover">
+              <Card className="sticky top-28 border-slate-200 shadow-card-hover rounded-xl bg-white">
                 <CardContent className="p-6">
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2 mb-2">
@@ -242,7 +258,7 @@ const CourseDetailsPage = () => {
                   </div>
 
                   <Button 
-                    className={`w-full py-6 font-dm-sans font-medium ${isWellness ? 'bg-sky hover:bg-sky/90' : 'bg-navy-900 hover:bg-navy-800'}`}
+                    className={`w-full py-6 font-dm-sans font-medium rounded-lg ${isWellness ? 'bg-teal hover:bg-teal/90' : 'bg-navy-900 hover:bg-navy-800'}`}
                     onClick={handleEnroll}
                     disabled={enrolling}
                     data-testid="enroll-btn"
@@ -264,9 +280,9 @@ const CourseDetailsPage = () => {
                     Secure payment via Stripe
                   </p>
 
-                  <div className="mt-6 p-4 bg-navy-50 rounded-lg">
+                  <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-100">
                     <p className="text-sm font-dm-sans text-navy-600">
-                      <strong>Note:</strong> ETT Foundational Course is a prerequisite for this program.
+                      <strong>Note:</strong> Complete prerequisite modules before advancing to higher levels.
                     </p>
                   </div>
                 </CardContent>

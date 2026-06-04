@@ -9,6 +9,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 
+// Logo component
+const Logo = ({ className = "w-12 h-12" }) => (
+  <img 
+    src="https://customer-assets.emergentagent.com/job_ett-india/artifacts/ksfgr2qo_image.png" 
+    alt="TTI Logo" 
+    className={className}
+  />
+);
+
 const SignupPage = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -52,28 +61,33 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-navy-50/30 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-[#f8fafa] flex items-center justify-center px-6 py-12">
+      {/* Wavy Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <svg className="absolute top-0 left-0 w-full opacity-30" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#d4eded" d="M0,192L60,186.7C120,181,240,171,360,181.3C480,192,600,224,720,213.3C840,203,960,149,1080,144C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+        </svg>
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         {/* Back Link */}
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-navy-500 hover:text-navy-900 transition-colors mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-navy-500 hover:text-navy-900 hover:border-slate-300 transition-all bg-white mb-8"
           data-testid="back-home-link"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="font-dm-sans text-sm">Back to Home</span>
         </Link>
 
-        <Card className="border-slate-200 shadow-card">
+        <Card className="border-slate-200 shadow-card bg-white rounded-xl">
           <CardHeader className="text-center pb-2">
-            <div className="w-12 h-12 bg-navy-900 rounded-sm flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-playfair font-bold text-xl">T</span>
-            </div>
+            <Logo className="w-14 h-14 mx-auto mb-4" />
             <CardTitle className="text-2xl font-playfair text-navy-900">
               Create Account
             </CardTitle>
@@ -94,7 +108,7 @@ const SignupPage = () => {
                   placeholder="Dr. John Smith"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white"
+                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white rounded-lg"
                   data-testid="name-input"
                 />
               </div>
@@ -109,7 +123,7 @@ const SignupPage = () => {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white"
+                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white rounded-lg"
                   data-testid="email-input"
                 />
               </div>
@@ -125,7 +139,7 @@ const SignupPage = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white pr-10"
+                    className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white pr-10 rounded-lg"
                     data-testid="password-input"
                   />
                   <button
@@ -148,14 +162,14 @@ const SignupPage = () => {
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white"
+                  className="h-12 font-dm-sans bg-slate-50 border-slate-200 focus:bg-white rounded-lg"
                   data-testid="confirm-password-input"
                 />
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-navy-900 hover:bg-navy-800 font-dm-sans font-medium mt-6"
+                className="w-full h-12 bg-teal hover:bg-teal/90 font-dm-sans font-medium mt-6 rounded-lg"
                 disabled={loading}
                 data-testid="signup-submit-btn"
               >
@@ -175,7 +189,7 @@ const SignupPage = () => {
                 Already have an account?{' '}
                 <Link 
                   to="/login" 
-                  className="text-sky hover:text-sky/80 font-medium"
+                  className="text-teal hover:text-teal/80 font-medium"
                   data-testid="login-link"
                 >
                   Sign in
