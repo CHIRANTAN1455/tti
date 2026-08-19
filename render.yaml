@@ -1,0 +1,64 @@
+# Render Blueprint — deploys this repo's backend (FastAPI) and frontend (React)
+# as two services in one shot: from the Render dashboard, "New" -> "Blueprint",
+# point it at this repo, and it reads this file automatically.
+#
+# Before you click deploy:
+#   1. Render has no managed MongoDB. Create a free cluster at mongodb.com/atlas,
+#      grab its connection string, and paste it into MONGO_URL below when Render
+#      prompts for it (it's marked sync: false, so nothing secret lives in git).
+#   2. Get a real Stripe secret key (the app ships with a dummy placeholder that
+#      can't process real payments) and paste it into STRIPE_API_KEY.
+#   3. Set a real ADMIN_PASSWORD — "1234" is a local-dev default, not safe to
+#      expose publicly.
+#
+# Service URLs below are predicted from the `name:` fields as
+# https://<name>.onrender.com — that's how Render allocates them by default.
+# If either name is already taken on your account, Render appends a random
+# suffix instead; if that happens, update CORS_ORIGINS and
+# REACT_APP_BACKEND_URL in the Render dashboard to match the real URLs.
+
+services:
+  - type: web
+    name: tti-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: "pip install --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/ -r requirements.txt"
+    startCommand: "uvicorn server:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PIP_EXTRA_INDEX_URL
+        value: https://d33sy5i8bnduwe.cloudfront.net/simple/
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: tti_production
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: STRIPE_API_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        value: ttl@admin.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://tti-frontend.onrender.com
+
+  - type: web
+    name: tti-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: "yarn install && yarn build"
+    staticPublishPath: build
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: REACT_APP_BACKEND_URL
+        value: https://tti-backend.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
