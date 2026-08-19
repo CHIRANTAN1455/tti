@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, MapPin, Clock, Users, Check, CreditCard, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Clock, Users, Check, CreditCard, ShieldCheck, Layers, FileCheck, Award, BookOpenCheck, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -172,8 +172,14 @@ const CourseDetailsPage = () => {
                 {course.title}
               </h1>
               
-              <p className="text-lg font-dm-sans text-navy-500 mb-8 leading-relaxed">
+              <p className="text-lg font-dm-sans text-navy-500 mb-3 leading-relaxed">
                 {course.detailed_description || course.description}
+              </p>
+
+              <p className={`font-dm-sans text-sm font-medium mb-8 ${isWellness ? 'text-teal' : 'text-navy-700'}`}>
+                {isWellness
+                  ? 'Built for wellness practitioners and personal-growth seekers.'
+                  : 'Built for licensed mental health professionals.'}
               </p>
 
               {/* Course Info */}
@@ -225,6 +231,41 @@ const CourseDetailsPage = () => {
                 </div>
               </div>
 
+              {/* What's Included */}
+              <div className="mb-12">
+                <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
+                  What's Included
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    course.slides?.length > 0 && {
+                      icon: Layers,
+                      label: `${course.slides.length}-slide interactive presentation`,
+                    },
+                    course.content_cards?.length > 0 && {
+                      icon: BookOpenCheck,
+                      label: `${course.content_cards.length} in-depth content deck${course.content_cards.length > 1 ? 's' : ''} with cited sources`,
+                    },
+                    course.quiz?.length > 0 && {
+                      icon: FileCheck,
+                      label: `${course.quiz.length}-question knowledge check — 90% to pass`,
+                    },
+                    (course.level === 'module' || course.level === 'level1' || course.level === 'level2') && {
+                      icon: Award,
+                      label: 'Counts toward your ETT completion certificate',
+                    },
+                    { icon: Check, label: 'Access from your dashboard anytime after enrolling' },
+                  ].filter(Boolean).map((item, index) => (
+                    <div key={index} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${isWellness ? 'bg-teal/10' : 'bg-navy-100'}`}>
+                        <item.icon className={`w-4 h-4 ${isWellness ? 'text-teal' : 'text-navy-600'}`} />
+                      </div>
+                      <span className="font-dm-sans text-sm text-navy-700">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Slide Deck */}
               {course.slides?.length > 0 && (
                 <div className="mb-12">
@@ -247,7 +288,7 @@ const CourseDetailsPage = () => {
 
               {/* Quiz */}
               {course.quiz?.length > 0 && (
-                <div>
+                <div className="mb-12">
                   <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
                     Check Your Understanding
                   </h2>
@@ -257,6 +298,67 @@ const CourseDetailsPage = () => {
                     tone={isWellness ? 'teal' : 'navy'}
                     onPassed={() => toast.success('Quiz passed! 🎉')}
                   />
+                </div>
+              )}
+
+              {/* Mid-page CTA */}
+              {!course.is_coming_soon && (
+                <div
+                  className={`rounded-2xl p-8 text-center mb-12 ${isWellness ? 'bg-teal' : 'bg-navy-900'}`}
+                  data-testid="mid-page-cta"
+                >
+                  <h3 className="text-2xl font-playfair font-semibold text-white mb-2">
+                    Ready to begin?
+                  </h3>
+                  <p className="font-dm-sans text-white/80 mb-6 max-w-md mx-auto">
+                    Enroll in {course.title} and get instant access to everything above.
+                  </p>
+                  <Button
+                    onClick={handleEnroll}
+                    disabled={enrolling}
+                    className="bg-white text-navy-900 hover:bg-white/90 font-dm-sans font-medium px-8 py-6 rounded-lg"
+                    data-testid="mid-page-enroll-btn"
+                  >
+                    {user?.is_admin ? 'Access as Admin' : 'Enroll Now'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              )}
+
+              {/* Instructor */}
+              <div className="mb-12">
+                <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
+                  Your Instructor
+                </h2>
+                <div className="flex items-start gap-4 p-6 bg-white rounded-xl border border-slate-100 shadow-sm">
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 font-playfair text-lg font-semibold ${isWellness ? 'bg-teal/10 text-teal' : 'bg-navy-100 text-navy-700'}`}>
+                    {course.instructor?.split(' ').map((w) => w[0]).slice(0, 2).join('')}
+                  </div>
+                  <div>
+                    <p className="font-playfair font-semibold text-navy-900 text-lg mb-1">{course.instructor}</p>
+                    <p className="font-dm-sans text-sm text-navy-500 leading-relaxed">
+                      {isWellness
+                        ? 'A certified trainer within the Trauma Transformation Institute network, teaching Emotional Transformation Therapy foundations to wellness practitioners and personal-growth seekers.'
+                        : 'A certified clinical trainer within the Trauma Transformation Institute network, delivering advanced Emotional Transformation Therapy training to licensed mental health professionals.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Evidence */}
+              {course.content_cards?.some((c) => c.sources?.length > 0) && (
+                <div>
+                  <div className="flex items-start gap-3 p-6 bg-slate-50 rounded-xl border border-slate-100">
+                    <Sparkles className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isWellness ? 'text-teal' : 'text-navy-700'}`} />
+                    <div>
+                      <p className="font-playfair font-semibold text-navy-900 mb-1">Grounded in current research</p>
+                      <p className="font-dm-sans text-sm text-navy-500 leading-relaxed">
+                        This course cites {course.content_cards.reduce((sum, c) => sum + (c.sources?.length || 0), 0)} sources —
+                        peer-reviewed research, clinical practice guidelines, and professional literature — reviewed for you
+                        inside each module, with links back to the originals.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </motion.div>
