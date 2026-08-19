@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut, BookOpen, Calendar, Award, ArrowRight } from 'lucide-react';
+import { LogOut, BookOpen, Calendar, Award, ArrowRight, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/AuthContext';
+import CourseJourneyMap from '@/components/CourseJourneyMap';
+import CertificateCard from '@/components/CertificateCard';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -25,6 +27,9 @@ const DashboardPage = () => {
   const { user, token, logout } = useAuth();
   const navigate = useNavigate();
   const [enrollments, setEnrollments] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [quizResults, setQuizResults] = useState([]);
+  const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +46,19 @@ const DashboardPage = () => {
       }
     };
     fetchEnrollments();
+    axios.get(`${API}/courses`).then((res) => setCourses(res.data)).catch(() => {});
+    axios
+      .get(`${API}/quiz-results/my`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setQuizResults(res.data))
+      .catch(() => {});
+    axios
+      .get(`${API}/certificates/my`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setCertificates(res.data))
+      .catch(() => {});
   }, [token]);
+
+  const enrolledIds = new Set(enrollments.map((e) => e.course.id));
+  const quizPassedIds = new Set(quizResults.filter((r) => r.passed).map((r) => r.course_id));
 
   const handleLogout = () => {
     logout();
@@ -113,7 +130,7 @@ const DashboardPage = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <Card className="border-slate-200 shadow-card bg-white rounded-xl">
                 <CardContent className="p-6 flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center">
@@ -155,7 +172,45 @@ const DashboardPage = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card className="border-slate-200 shadow-card bg-white rounded-xl">
+                <CardContent className="p-6 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-playfair font-bold text-navy-900">
+                      {quizPassedIds.size}
+                    </p>
+                    <p className="text-sm font-dm-sans text-navy-500">Quizzes Passed</p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
+
+            {/* Journey Map */}
+            {courses.length > 0 && (
+              <div className="mb-8">
+                <CourseJourneyMap
+                  courses={courses}
+                  enrolledIds={enrolledIds}
+                  quizPassedIds={quizPassedIds}
+                  onSelect={(c) => navigate(`/courses/${c.id}`)}
+                />
+              </div>
+            )}
+
+            {/* Certificates */}
+            {certificates.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-4">Certificates</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {certificates.map((c) => (
+                    <CertificateCard key={c.track} {...c} />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Enrolled Courses */}
             <Card className="border-slate-200 shadow-card bg-white rounded-xl">

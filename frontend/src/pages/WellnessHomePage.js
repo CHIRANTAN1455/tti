@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
+import AnimatedAvatar from '@/components/AnimatedAvatar';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -149,9 +150,16 @@ const WellnessHomePage = () => {
                   >
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
-                          <div className="w-4 h-1 bg-slate-300 rounded"></div>
-                        </div>
+                        {course.content_cards?.length > 0 ? (
+                          <div className="flex items-center gap-2" data-testid={`ai-guide-hint-${course.id}`}>
+                            <AnimatedAvatar tone="teal" size={32} />
+                            <span className="text-[11px] font-dm-sans font-medium text-teal">AI Guide</span>
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
+                            <div className="w-4 h-1 bg-slate-300 rounded"></div>
+                          </div>
+                        )}
                         {course.is_coming_soon && (
                           <Badge className="bg-slate-100 text-slate-600 font-dm-sans border-0 text-xs">
                             <Lock className="w-3 h-3 mr-1" />

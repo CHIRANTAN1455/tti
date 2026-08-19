@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, MapPin, Clock, Users, Check, CreditCard } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Clock, Users, Check, CreditCard, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/AuthContext';
+import ModuleContentCards from '@/components/ModuleContentCards';
+import ModuleQuiz from '@/components/ModuleQuiz';
+import SlideDeck from '@/components/SlideDeck';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -72,7 +75,14 @@ const CourseDetailsPage = () => {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      
+
+      if (response.data.bypass) {
+        // Admin account — already enrolled, no payment needed
+        toast.success('Admin access — enrolled without payment');
+        navigate('/dashboard');
+        return;
+      }
+
       // Redirect to Stripe checkout
       window.location.href = response.data.checkout_url;
     } catch (error) {
@@ -199,7 +209,7 @@ const CourseDetailsPage = () => {
               </div>
 
               {/* Features */}
-              <div>
+              <div className="mb-12">
                 <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
                   What You'll Learn
                 </h2>
@@ -214,6 +224,41 @@ const CourseDetailsPage = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Slide Deck */}
+              {course.slides?.length > 0 && (
+                <div className="mb-12">
+                  <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
+                    Interactive Slide Deck
+                  </h2>
+                  <SlideDeck slides={course.slides} tone={isWellness ? 'teal' : 'navy'} />
+                </div>
+              )}
+
+              {/* AI Guide - Content Cards */}
+              {course.content_cards?.length > 0 && (
+                <div className="mb-12">
+                  <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
+                    Explore the Course Content
+                  </h2>
+                  <ModuleContentCards cards={course.content_cards} tone={isWellness ? 'teal' : 'navy'} />
+                </div>
+              )}
+
+              {/* Quiz */}
+              {course.quiz?.length > 0 && (
+                <div>
+                  <h2 className="text-2xl font-playfair font-semibold text-navy-900 mb-6">
+                    Check Your Understanding
+                  </h2>
+                  <ModuleQuiz
+                    questions={course.quiz}
+                    courseId={course.id}
+                    tone={isWellness ? 'teal' : 'navy'}
+                    onPassed={() => toast.success('Quiz passed! 🎉')}
+                  />
+                </div>
+              )}
             </motion.div>
 
             {/* Sidebar - Enrollment Card */}
@@ -257,8 +302,8 @@ const CourseDetailsPage = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    className={`w-full py-6 font-dm-sans font-medium rounded-lg ${isWellness ? 'bg-teal hover:bg-teal/90' : 'bg-navy-900 hover:bg-navy-800'}`}
+                  <Button
+                    className={`w-full py-6 font-dm-sans font-medium rounded-lg ${user?.is_admin ? 'bg-amber-500 hover:bg-amber-500/90' : isWellness ? 'bg-teal hover:bg-teal/90' : 'bg-navy-900 hover:bg-navy-800'}`}
                     onClick={handleEnroll}
                     disabled={enrolling}
                     data-testid="enroll-btn"
@@ -268,6 +313,11 @@ const CourseDetailsPage = () => {
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                         Processing...
                       </div>
+                    ) : user?.is_admin ? (
+                      <>
+                        <ShieldCheck className="w-4 h-4 mr-2" />
+                        Access as Admin (No Payment)
+                      </>
                     ) : (
                       <>
                         <CreditCard className="w-4 h-4 mr-2" />
@@ -277,7 +327,7 @@ const CourseDetailsPage = () => {
                   </Button>
 
                   <p className="text-xs font-dm-sans text-navy-400 text-center mt-4">
-                    Secure payment via Stripe
+                    {user?.is_admin ? 'Signed in as admin — payment gateway bypassed' : 'Secure payment via Stripe'}
                   </p>
 
                   <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-100">

@@ -1,8 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Leaf, Brain, Heart, Stethoscope, Award, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import CourseJourneyMap from '@/components/CourseJourneyMap';
+import axios from 'axios';
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // Logo component using the provided image
 const Logo = ({ className = "w-10 h-10" }) => (
@@ -14,8 +19,31 @@ const Logo = ({ className = "w-10 h-10" }) => (
 );
 
 const LandingPage = () => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
+  const [enrolledIds, setEnrolledIds] = useState(new Set());
+  const [quizPassedIds, setQuizPassedIds] = useState(new Set());
+
+  useEffect(() => {
+    axios.get(`${API}/courses`).then((res) => setCourses(res.data)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!user || !token) {
+      setEnrolledIds(new Set());
+      setQuizPassedIds(new Set());
+      return;
+    }
+    axios
+      .get(`${API}/enrollments/my`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setEnrolledIds(new Set(res.data.map((e) => e.course.id))))
+      .catch(() => {});
+    axios
+      .get(`${API}/quiz-results/my`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setQuizPassedIds(new Set(res.data.filter((r) => r.passed).map((r) => r.course_id))))
+      .catch(() => {});
+  }, [user, token]);
 
   return (
     <div className="min-h-screen bg-[#f8fafa]">
@@ -239,6 +267,26 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Journey Map */}
+      {courses.length > 0 && (
+        <section className="px-6 pb-24 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CourseJourneyMap
+                courses={courses}
+                enrolledIds={enrolledIds}
+                quizPassedIds={quizPassedIds}
+                onSelect={(c) => navigate(`/courses/${c.id}`)}
+              />
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-100 py-12 px-6 bg-white/80 relative z-10">
